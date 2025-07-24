@@ -1,0 +1,20 @@
+[
+    {
+      "id": "user_001",
+      "name": "Amit Sharma",
+      "contactInfo": {
+        "email": "amit@example.com",
+        "phone": "+911234567890"
+      },
+      "bookings": ["booking_001"]
+    },
+    {
+      "id": "user_002",
+      "name": "Priya Singh",
+      "contactInfo": {
+        "email": "priya@example.com",
+        "phone": "+919876543210"
+      },
+      "bookings": []
+    }
+  ]

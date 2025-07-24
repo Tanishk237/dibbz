@@ -1,0 +1,7 @@
+{
+    "id": "item_017",
+    "name": "Masala Tea",
+    "description": "Spiced Indian tea.",
+    "price": 50,
+    "photo": "gs://dibbz/restaurants/rest_002/menu/item_017.jpg"
+  }

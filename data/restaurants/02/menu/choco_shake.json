@@ -1,0 +1,7 @@
+{
+    "id": "item_015",
+    "name": "Choco Shake",
+    "description": "Chocolate milkshake with ice cream.",
+    "price": 130,
+    "photo": "gs://dibbz/restaurants/rest_002/menu/item_015.jpg"
+  }

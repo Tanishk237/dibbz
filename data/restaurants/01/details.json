@@ -1,0 +1,23 @@
+
+{
+    "name": "Cafe De Flora",
+    "location": {
+      "address": "123 MG Road, Mumbai",
+      "lat": 19.076,
+      "lng": 72.8777
+    },
+    "cuisine": ["Italian", "Continental"],
+    "rating": 4.5,
+    "priceLevel": "$$",
+    "openStatus": "open",
+    "tags": ["Vibe Dining", "Romantic", "Live Music"],
+    "contactNumber": "+91-9876543210",
+    "images": [
+      "https://storage.googleapis.com/your-bucket/cafe-banner.jpg",
+      "https://storage.googleapis.com/your-bucket/cafe-inside.jpg"
+    ],
+    "bannerImage": "https://storage.googleapis.com/your-bucket/banner.jpg",
+    "dineType": "Fine Dine",
+    "createdAt": "2025-07-01T08:00:00Z"
+  }
+  

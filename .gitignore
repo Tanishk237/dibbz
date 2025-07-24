@@ -1,0 +1,33 @@
+serviceAccountKey.json
+
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment files
+.env
+.env.local
+
+# OS metadata
+.DS_Store
+
+# Build and coverage
+dist/
+build/
+coverage/
+
+# Editor folders
+.vscode/
+.idea/
+
+# Optional: If you're using Firebase locally
+.firebase/
+
+# Optional: If you're using Mac
+*.swp

@@ -1,0 +1,7 @@
+{
+    "id": "item_019",
+    "name": "Caesar Salad",
+    "description": "Classic salad with lettuce and dressing.",
+    "price": 140,
+    "photo": "gs://dibbz/restaurants/rest_002/menu/item_019.jpg"
+  }

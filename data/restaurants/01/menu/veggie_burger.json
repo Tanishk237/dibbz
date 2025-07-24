@@ -1,0 +1,7 @@
+{
+    "id": "item_011",
+    "name": "Veggie Burger",
+    "description": "Loaded with fresh veggies and cheese.",
+    "price": 180,
+    "photo": "gs://dibbz/restaurants/rest_002/menu/item_011.jpg"
+  }

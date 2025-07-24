@@ -1,0 +1,7 @@
+{
+    "id": "item_003",
+    "name": "Dal Makhani",
+    "description": "Rich and creamy black lentils.",
+    "price": 220,
+    "photo": "gs://dibbz/restaurants/rest_001/menu/item_003.jpg"
+  }

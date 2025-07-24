@@ -1,0 +1,17 @@
+[
+    {
+      "id": "booking_001",
+      "userId": "user_001",
+      "restaurantId": "rest_001",
+      "tableId": "T1",
+      "dateTime": "2024-06-10T19:00:00Z",
+      "preorderedItems": [
+        { "itemId": "item_001", "quantity": 2 },
+        { "itemId": "item_002", "quantity": 1 }
+      ],
+      "subtotal": 850,
+      "discountApplied": 85,
+      "total": 765,
+      "paymentStatus": "50%_paid"
+    }
+  ]
