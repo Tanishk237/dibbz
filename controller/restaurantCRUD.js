@@ -1,24 +1,61 @@
 const { v4: uuidv4 } = require("uuid");
 const { admin, db } = require("../firebase");
-const restaurantSample = require("../data/restaurants/01/details.json");
+const path = require("path");
+const fs = require("fs");
+
 const restaurantCollection = db.collection("restaurants");
 
-// CREATE
+//Loading data
+const loadRestaurantData = () => {
+  const restaurantsDir = path.join(__dirname, "../data/restaurants");
+  const restaurantIds = fs.readdirSync(restaurantsDir);
+  const restaurants = [];
 
+  restaurantIds.forEach((id) => {
+    const detailsPath = path.join(restaurantsDir, id, "details.json");
+
+    if (!fs.existsSync(detailsPath)) {
+      console.warn(`Missing details.json for restaurant ${id}`);
+      return;
+    }
+
+    const details = JSON.parse(fs.readFileSync(detailsPath, "utf-8"));
+
+    const menuPath = path.join(restaurantsDir, id, "menu");
+    const menuItems = [];
+
+    if (fs.existsSync(menuPath)) {
+      const menuFiles = fs.readdirSync(menuPath);
+      menuFiles.forEach((file) => {
+        const itemPath = path.join(menuPath, file);
+        const itemData = JSON.parse(fs.readFileSync(itemPath, "utf-8"));
+        menuItems.push(itemData);
+      });
+    }
+
+    restaurants.push({
+      ...details,
+      id,
+      menu: menuItems,
+    });
+  });
+
+  return restaurants;
+};
+
+// CREATE
 const createRestaurant = async (req, res) => {
   try {
-    const data = require("../data/restaurants/01/details.json");
-    const restaurants = data.restaurants;
+    const restaurants = loadRestaurantData();
     const batch = db.batch();
 
     restaurants.forEach((restaurant) => {
-      const id = uuidv4();
-      const docRef = restaurantCollection.doc(id);
-      batch.set(docRef, { ...restaurant, id });
+      const docId = uuidv4();
+      const docRef = restaurantCollection.doc(docId);
+      batch.set(docRef, { ...restaurant, firebaseId: docId });
     });
 
     await batch.commit();
-
     res.status(201).send({ message: "Seeded restaurant data successfully." });
   } catch (error) {
     console.error("Seeding error:", error);
@@ -65,9 +102,10 @@ const updateRestaurant = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
 
-    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
       return res.status(400).send("Invalid update data");
     }
+
     await restaurantCollection.doc(id).update(data);
     res.status(200).send("Restaurant updated");
   } catch (error) {
@@ -88,11 +126,35 @@ const deleteRestaurant = async (req, res) => {
   }
 };
 
-// EXPORTING ALL CONTROLLERS
+
+const deleteAllRestaurants = async (req, res) => {
+  try {
+    const snapshot = await restaurantCollection.get();
+
+    if (snapshot.empty) {
+      return res.status(200).send("No restaurants to delete.");
+    }
+
+    const batch = db.batch();
+
+    snapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    await batch.commit();
+
+    res.status(200).send("All restaurants deleted successfully.");
+  } catch (error) {
+    console.error("Delete All Error:", error);
+    res.status(500).send("Failed to delete all restaurants");
+  }
+};
+
 module.exports = {
   createRestaurant,
   getAllRestaurants,
   getRestaurantById,
   updateRestaurant,
-  deleteRestaurant
+  deleteRestaurant,
+  deleteAllRestaurants,
 };

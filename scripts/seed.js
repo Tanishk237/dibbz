@@ -1,34 +1,39 @@
-// scripts/seed.js
-const { v4: uuidv4 } = require("uuid");
-const admin = require("firebase-admin");
-const serviceAccount = require("../serviceAccountKey.json");
+const fs = require('fs');
+const path = require('path');
+const { admin, db } = require('../firebase');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+function readJsonFilesRecursively(dir) {
+  let results = {};
+  fs.readdirSync(dir).forEach(file => {
+    const fullPath = path.join(dir, file);
+    if (fs.statSync(fullPath).isDirectory()) {
+      results[file] = readJsonFilesRecursively(fullPath);
+    } else if (file.endsWith('.json')) {
+      results[path.basename(file, '.json')] = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+    }
+  });
+  return results;
+}
 
-const db = admin.firestore();
-const restaurantCollection = db.collection("restaurants");
+async function seedRestaurants() {
+  const dataDir = path.join(__dirname, '../data/restaurants');
+  const restaurants = readJsonFilesRecursively(dataDir);
 
-// Load and parse JSON
-const data = require("../data/restaurantSample.json");
-const restaurants = data.restaurants;
-
-const seed = async () => {
   const batch = db.batch();
-
-  restaurants.forEach((restaurant) => {
-    const id = uuidv4();
-    const docRef = restaurantCollection.doc(id);
-    batch.set(docRef, { ...restaurant, id });
+  Object.entries(restaurants).forEach(([id, details]) => {
+    if (!details.details) return;
+    const docRef = db.collection('restaurants').doc(id);
+    batch.set(docRef, details.details); 
+    if (details.menu) {
+      Object.entries(details.menu).forEach(([menuId, menuItem]) => {
+        const menuRef = docRef.collection('menu').doc(menuId);
+        batch.set(menuRef, menuItem);
+      });
+    }
   });
 
-  try {
-    await batch.commit();
-    console.log("🌱 Seeded restaurant data to Firestore!");
-  } catch (error) {
-    console.error("❌ Error seeding Firestore:", error);
-  }
-};
+  await batch.commit();
+  console.log('Seeded all restaurant data!');
+}
 
-seed();
+seedRestaurants().catch(console.error);

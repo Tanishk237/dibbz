@@ -7,6 +7,7 @@ const {
   getRestaurantById,
   updateRestaurant,
   deleteRestaurant,
+  deleteAllRestaurants,
 } = require("../controller/restaurantCRUD");
 
 // POST
@@ -23,5 +24,8 @@ router.put("/:id", updateRestaurant);
 
 // DELETE 
 router.delete("/:id", deleteRestaurant);
+
+//DELETE ALL
+router.delete("/", deleteAllRestaurants);
 
 module.exports = router;
